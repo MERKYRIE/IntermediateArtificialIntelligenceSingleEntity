@@ -8,11 +8,17 @@ namespace NIntermediateArtificialIntelligenceSingleEntity
     {
         friend std::int32_t (::main());
 
+        private : std::string FModule;
         private : std::string FCommand;
 
-        private : void IGetNewCommand(const std::string& PModule , std::uintmax_t PIndentation = 0);
-        private : void ISetNewCommand(const std::string& PModule , std::uintmax_t PIndentation = 0);
-        private : bool IReturn();
-        private : bool IContinue();
+        private : bool ARun();
+
+        public : void OGetNewCommand(std::uintmax_t PIndentation);
+        public : void OSetNewCommand(std::uintmax_t PIndentation);
+        public : std::string OCommand();
+        public : void OCommand(std::string PCommand);
+        public : bool OReturn();
+        public : bool OContinue();
+        public : bool OBreak();
     };
 }

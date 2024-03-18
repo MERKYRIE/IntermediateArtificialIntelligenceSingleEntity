@@ -1,20 +1,26 @@
 #include"Intermediate Artificial Intelligence Single Entity.hpp"
 
 #include"Driver.hpp"
-#include"Compiler.hpp"
-#include"Linker.hpp"
+#include"Driver\\Preprocessor.hpp"
+#include"Driver\\Compiler.hpp"
+#include"Driver\\Linker.hpp"
+#include"Driver\\Executor.hpp"
 
 std::int32_t main()
 {
-    NIntermediateArtificialIntelligenceSingleEntity::GCompiler = new NIntermediateArtificialIntelligenceSingleEntity::CCompiler;
-    NIntermediateArtificialIntelligenceSingleEntity::GLinker = new NIntermediateArtificialIntelligenceSingleEntity::CLinker;
     NIntermediateArtificialIntelligenceSingleEntity::GDriver = new NIntermediateArtificialIntelligenceSingleEntity::CDriver;
-    if(LCompiler.ARun())
+    NIntermediateArtificialIntelligenceSingleEntity::NDriver::GPreprocessor = new NIntermediateArtificialIntelligenceSingleEntity::NDriver::CPreprocessor;
+    NIntermediateArtificialIntelligenceSingleEntity::NDriver::GCompiler = new NIntermediateArtificialIntelligenceSingleEntity::NDriver::CCompiler;
+    NIntermediateArtificialIntelligenceSingleEntity::NDriver::GLinker = new NIntermediateArtificialIntelligenceSingleEntity::NDriver::CLinker;
+    NIntermediateArtificialIntelligenceSingleEntity::NDriver::GExecutor = new NIntermediateArtificialIntelligenceSingleEntity::NDriver::CExecutor;
+    if(!NIntermediateArtificialIntelligenceSingleEntity::GDriver->ARun())
     {
-        return(0);
+    
     }
-    delete NIntermediateArtificialIntelligenceSingleEntity::GLinker;
-    delete NIntermediateArtificialIntelligenceSingleEntity::GCompiler;
+    delete NIntermediateArtificialIntelligenceSingleEntity::NDriver::GExecutor;
+    delete NIntermediateArtificialIntelligenceSingleEntity::NDriver::GLinker;
+    delete NIntermediateArtificialIntelligenceSingleEntity::NDriver::GCompiler;
+    delete NIntermediateArtificialIntelligenceSingleEntity::NDriver::GPreprocessor;
     delete NIntermediateArtificialIntelligenceSingleEntity::GDriver;
     return(0);
 }

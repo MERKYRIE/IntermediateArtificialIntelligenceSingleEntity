@@ -18,6 +18,24 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="_Input\_\Driver.cpp" />
+    <ClCompile Include="_Input\_\Driver\Compiler.cpp" />
+    <ClCompile Include="_Input\_\Driver\Executor.cpp" />
+    <ClCompile Include="_Input\_\Driver\Linker.cpp" />
+    <ClCompile Include="_Input\_\Driver\Preprocessor.cpp" />
+    <ClCompile Include="_Input\_\Intermediate Artificial Intelligence Single Entity.cpp" />
+    <ClCompile Include="_Input\_\Loader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="_Input\_\Driver.hpp" />
+    <ClInclude Include="_Input\_\Driver\Compiler.hpp" />
+    <ClInclude Include="_Input\_\Driver\Executor.hpp" />
+    <ClInclude Include="_Input\_\Driver\Linker.hpp" />
+    <ClInclude Include="_Input\_\Driver\Preprocessor.hpp" />
+    <ClInclude Include="_Input\_\Intermediate Artificial Intelligence Single Entity.hpp" />
+    <ClInclude Include="_Input\_\Loader.hpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -155,20 +173,6 @@
       <AdditionalLibraryDirectories>$(SolutionDir)_Input\_\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="_Input\_\Compiler.cpp" />
-    <ClCompile Include="_Input\_\Driver.cpp" />
-    <ClCompile Include="_Input\_\Intermediate Artificial Intelligence Single Entity.cpp" />
-    <ClCompile Include="_Input\_\Linker.cpp" />
-    <ClCompile Include="_Input\_\Preprocessor.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="_Input\_\Compiler.hpp" />
-    <ClInclude Include="_Input\_\Driver.hpp" />
-    <ClInclude Include="_Input\_\Intermediate Artificial Intelligence Single Entity.hpp" />
-    <ClInclude Include="_Input\_\Linker.hpp" />
-    <ClInclude Include="_Input\_\Preprocessor.hpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -1,33 +1,123 @@
 #include"Driver.hpp"
 
+#include"Driver\\Preprocessor.hpp"
+#include"Driver\\Compiler.hpp"
+#include"Driver\\Linker.hpp"
+#include"Driver\\Executor.hpp"
+
 namespace NIntermediateArtificialIntelligenceSingleEntity
 {
-    void CDriver::IGetNewCommand(const std::string& PModule , std::uintmax_t PIndentation)
+    bool CDriver::ARun()
     {
-        for(std::uintmax_t LIndent{0} ; LIndent < PIndentation ; LIndent++)
+        FModule = "Preprocessor";
+        while(true)
         {
-            std::cout << " ";
+            if(FCommand.empty())
+            {
+                OGetNewCommand(0);
+                if(OReturn())
+                {
+                    return(true);
+                }
+                if(OContinue())
+                {
+                    continue;
+                }
+            }
+            if(FModule == "Preprocessor")
+            {
+                NDriver::GPreprocessor->ARun();
+                continue;
+            }
+            if(FModule == "Compiler")
+            {
+                NDriver::GCompiler->ARun();
+                continue;
+            }
+            if(FModule == "Linker")
+            {
+                NDriver::GLinker->ARun();
+                continue;
+            }
+            if(FModule == "Executor")
+            {
+                NDriver::GExecutor->ARun();
+                continue;
+            }
+            if(FModule.empty())
+            {
+                break;
+            }
         }
-        std::cout << PModule << " << ";
-        std::getline(std::cin , FCommand);
+        return(false);
     }
-
-    void CDriver::ISetNewCommand(const std::string& PModule , std::uintmax_t PIndentation)
+    
+    void CDriver::OGetNewCommand(std::uintmax_t PIndentation)
     {
         for(std::uintmax_t LIndent{0} ; LIndent < PIndentation ; LIndent++)
         {
             std::cout << "    ";
         }
-        std::cout << PModule << " >> ";
+        std::cout << FModule << " << ";
+        std::getline(std::cin , FCommand);
     }
-
-    bool CDriver::IReturn()
+    void CDriver::OSetNewCommand(std::uintmax_t PIndentation)
     {
-        return(FCommand == "Return");
+        for(std::uintmax_t LIndent{0} ; LIndent < PIndentation ; LIndent++)
+        {
+            std::cout << "    ";
+        }
+        std::cout << FModule << " >> ";
     }
-
-    bool CDriver::IContinue()
+    std::string CDriver::OCommand()
     {
-        return(FCommand == "Continue");
+        return FCommand;
+    }
+    void CDriver::OCommand(std::string PCommand)
+    {
+        FCommand = PCommand;
+    }
+    bool CDriver::OReturn()
+    {
+        if(FCommand == "Return")
+        {
+            FCommand.clear();
+            return(true);
+        }
+        return(false);
+    }
+    bool CDriver::OContinue()
+    {
+        if(FCommand == "Continue")
+        {
+            if(FModule == "Executor")
+            {
+                FModule.clear();
+            }
+            if(FModule == "Linker")
+            {
+                FModule = "Executor";
+            }
+            if(FModule == "Compiler")
+            {
+                FModule = "Linker";
+            }
+            if(FModule == "Preprocessor")
+            {
+                FModule = "Compiler";
+            }
+            FCommand.clear();
+            return(true);
+        }
+        return(false);
+    }
+    bool CDriver::OBreak()
+    {
+        if(FCommand == "Break")
+        {
+            FCommand.clear();
+            return(true);
+        }
+        return(false);
     }
 }

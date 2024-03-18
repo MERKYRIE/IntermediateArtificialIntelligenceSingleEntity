@@ -1,6 +1,7 @@
 #pragma once
 
 #include<algorithm>
+#include<array>
 #include<iostream>
 #include<set>
 #include<string>
@@ -10,7 +11,12 @@ std::int32_t main();
 
 namespace NIntermediateArtificialIntelligenceSingleEntity
 {
-    CDriver* GDriver;
-    CCompiler* GCompiler;
-    CLinker* GLinker;
+    inline class CDriver* GDriver;
+    namespace NDriver
+    {
+        inline class CPreprocessor* GPreprocessor;
+        inline class CCompiler* GCompiler;
+        inline class CLinker* GLinker;
+        inline class CExecutor* GExecutor;
+    }
 }
