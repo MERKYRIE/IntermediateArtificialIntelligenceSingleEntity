@@ -1,26 +1,64 @@
-#include"Intermediate Artificial Intelligence Single Entity.hpp"
-
-#include"Driver.hpp"
-#include"Driver\\Preprocessor.hpp"
-#include"Driver\\Compiler.hpp"
-#include"Driver\\Linker.hpp"
-#include"Driver\\Executor.hpp"
+#include<algorithm>
+#include<array>
+#include<iostream>
+#include<string>
+#include<unordered_map>
+#include<unordered_set>
+#include<vector>
 
 std::int32_t main()
 {
-    NIntermediateArtificialIntelligenceSingleEntity::GDriver = new NIntermediateArtificialIntelligenceSingleEntity::CDriver;
-    NIntermediateArtificialIntelligenceSingleEntity::NDriver::GPreprocessor = new NIntermediateArtificialIntelligenceSingleEntity::NDriver::CPreprocessor;
-    NIntermediateArtificialIntelligenceSingleEntity::NDriver::GCompiler = new NIntermediateArtificialIntelligenceSingleEntity::NDriver::CCompiler;
-    NIntermediateArtificialIntelligenceSingleEntity::NDriver::GLinker = new NIntermediateArtificialIntelligenceSingleEntity::NDriver::CLinker;
-    NIntermediateArtificialIntelligenceSingleEntity::NDriver::GExecutor = new NIntermediateArtificialIntelligenceSingleEntity::NDriver::CExecutor;
-    if(!NIntermediateArtificialIntelligenceSingleEntity::GDriver->ARun())
+    std::unordered_map<std::string , std::unordered_map<std::string , std::uintmax_t>> LTransitions;
+    std::uintmax_t LBegin;
+    std::uintmax_t LEnd;
+    std::unordered_set<std::string> LLocations;
+    std::unordered_map<std::string , std::uintmax_t> LCosts;
+    std::unordered_map<std::string , std::uintmax_t> LDistances;
+    std::string LCurrent;
+    LTransitions["A"]["B"] = 1;
+    LTransitions["B"]["D"] = 2;
+    LTransitions["A"]["C"] = 3;
+    LTransitions["C"]["D"] = 4;
+    LBegin = 0;
+    LEnd = 3;
+    for(std::pair<const std::string , std::unordered_map<std::string , std::uintmax_t>>& LTransition : LTransitions)
     {
-    
+        LLocations.insert(LTransition.first);
+        for(std::pair<const std::string , std::uintmax_t>& LCost : LTransition.second)
+        {
+            LLocations.insert(LCost.first);
+        }
     }
-    delete NIntermediateArtificialIntelligenceSingleEntity::NDriver::GExecutor;
-    delete NIntermediateArtificialIntelligenceSingleEntity::NDriver::GLinker;
-    delete NIntermediateArtificialIntelligenceSingleEntity::NDriver::GCompiler;
-    delete NIntermediateArtificialIntelligenceSingleEntity::NDriver::GPreprocessor;
-    delete NIntermediateArtificialIntelligenceSingleEntity::GDriver;
+    std::ranges::for_each(LCosts , [](std::uintmax_t& PCost){PCost = std::numeric_limits<std::uintmax_t>::max();});
+    LCosts[LBegin] = 0;
+    std::ranges::for_each(LDistances , [](std::uintmax_t& PDistance){PDistance = std::numeric_limits<std::uintmax_t>::max();});
+    LDistances[LBegin] = 0;
+    while(!LLocations.empty())
+    {
+        LCurrent = std::ranges::min(LLocations);
+        for(std::string LLocation : LLocations)
+        {
+            if(LCurrent != LLocation)
+            {
+                if(LTransitions[LCurrent][LLocation] != std::numeric_limits<std::uintmax_t>::max())
+                {
+                    if(LTransitions[LCurrent][LLocation] < LCosts[LLocation])
+                    {
+                        LCosts[LLocation] = LCosts[LCurrent] + LTransitions[LCurrent][LLocation];
+                    }
+                    if(LDistances[LCurrent] < LDistances[LLocation])
+                    {
+                        LDistances[LLocation] = LDistances[LCurrent] + 1;
+                    }
+                }
+            }
+        }
+        LLocations.erase(std::ranges::find(LLocations , LCurrent));
+    }
+    std::cout << "Cost = " << LCosts[LEnd] << "\n"
+              << "Distance = " << LDistances[LEnd] << "\n";
+    #ifdef _WIN32
+        std::system("Pause");
+    #endif
     return(0);
 }

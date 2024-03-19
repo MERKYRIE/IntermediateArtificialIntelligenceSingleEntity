@@ -19,22 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="_Input\_\Driver.cpp" />
-    <ClCompile Include="_Input\_\Driver\Compiler.cpp" />
-    <ClCompile Include="_Input\_\Driver\Executor.cpp" />
-    <ClCompile Include="_Input\_\Driver\Linker.cpp" />
-    <ClCompile Include="_Input\_\Driver\Preprocessor.cpp" />
     <ClCompile Include="_Input\_\Intermediate Artificial Intelligence Single Entity.cpp" />
-    <ClCompile Include="_Input\_\Loader.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="_Input\_\Driver.hpp" />
-    <ClInclude Include="_Input\_\Driver\Compiler.hpp" />
-    <ClInclude Include="_Input\_\Driver\Executor.hpp" />
-    <ClInclude Include="_Input\_\Driver\Linker.hpp" />
-    <ClInclude Include="_Input\_\Driver\Preprocessor.hpp" />
-    <ClInclude Include="_Input\_\Intermediate Artificial Intelligence Single Entity.hpp" />
-    <ClInclude Include="_Input\_\Loader.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
