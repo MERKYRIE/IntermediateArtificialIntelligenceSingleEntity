@@ -1,3 +1,4 @@
+/*
 #include<algorithm>
 #include<array>
 #include<iostream>
@@ -72,6 +73,124 @@ std::int32_t main()
               << "Path = ";
     std::ranges::for_each(LPaths[LEnd] , [](std::string& PPath){std::cout << ">" << PPath;});
     std::cout << "\n";
+    #ifdef _WIN32
+        std::system("Pause");
+    #endif
+    return(0);
+}
+*/
+
+#include<algorithm>
+#include<array>
+#include<iostream>
+#include<string>
+#include<unordered_map>
+#include<unordered_set>
+#include<vector>
+
+std::int32_t main()
+{
+    struct SNode
+    {
+        std::intmax_t FTo;
+        std::intmax_t FFrom;
+        std::intmax_t FTotal;
+        SNode* FParent;
+        std::intmax_t FX;
+        std::intmax_t FY;
+    };
+
+    std::intmax_t LWidth;
+    std::intmax_t LHeight;
+    std::vector<SNode> LNodes;
+    SNode* LBegin;
+    SNode* LEnd;
+    SNode* LCurrent;
+    std::vector<SNode*> LOpened;
+    std::vector<SNode*> LClosed;
+    std::vector<SNode*> LChildren;
+
+    LWidth = 10;
+    LHeight = 10;
+    for(std::intmax_t LX{0} ; LX < LWidth ; LX++)
+    {
+        for(std::intmax_t LY{0} ; LY < LHeight ; LY++)
+        {
+            LNodes.emplace_back(0 , 0 , 0 , nullptr , LX , LY);
+        }
+    }
+    LBegin = &*std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == 1 && PNode.FY == 1;});
+    LEnd = &*std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == 3 && PNode.FY == 2;});
+    LOpened.push_back(LBegin);
+    while(!LOpened.empty())
+    {
+        LCurrent = std::ranges::min(LOpened , [&](SNode*& PNode , SNode*& PMinimum){return PNode->FTotal < PMinimum->FTotal;});
+        LOpened.erase(std::ranges::find(LOpened , LCurrent));
+        LClosed.push_back(LCurrent);
+        if(LCurrent == LEnd)
+        {
+            for()
+            {
+            
+            }
+            break;
+        }
+        if(LCurrent->FX - 1 == std::clamp<std::intmax_t>(LCurrent->FX - 1 , 0 , LWidth - 1))
+        {
+            LChildren.push_back(&*std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == LCurrent->FX - 1 && PNode.FY == LCurrent->FY;}));
+        }
+        if(LCurrent->FX + 1 == std::clamp<std::intmax_t>(LCurrent->FX + 1 , 0 , LWidth - 1))
+        {
+            LChildren.push_back(&*std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == LCurrent->FX + 1 && PNode.FY == LCurrent->FY;}));
+        }
+        if(LCurrent->FY - 1 == std::clamp<std::intmax_t>(LCurrent->FY - 1 , 0 , LHeight - 1))
+        {
+            LChildren.push_back(&*std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == LCurrent->FX && PNode.FY == LCurrent->FY - 1;}));
+        }
+        if(LCurrent->FY + 1 == std::clamp<std::intmax_t>(LCurrent->FY + 1 , 0 , LHeight - 1))
+        {
+            LChildren.push_back(&*std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == LCurrent->FX && PNode.FY == LCurrent->FY + 1;}));
+        }
+        if(LCurrent->FX - 1 == std::clamp<std::intmax_t>(LCurrent->FX - 1 , 0 , LWidth - 1) && LCurrent->FY - 1 == std::clamp<std::intmax_t>(LCurrent->FY - 1 , 0 , LHeight - 1))
+        {
+            LChildren.push_back(&*std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == LCurrent->FX - 1 && PNode.FY == LCurrent->FY - 1;}));
+        }
+        if(LCurrent->FX + 1 == std::clamp<std::intmax_t>(LCurrent->FX + 1 , 0 , LWidth - 1) && LCurrent->FY + 1 == std::clamp<std::intmax_t>(LCurrent->FY + 1 , 0 , LHeight - 1))
+        {
+            LChildren.push_back(&*std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == LCurrent->FX + 1 && PNode.FY == LCurrent->FY + 1;}));
+        }
+        if(LCurrent->FX - 1 == std::clamp<std::intmax_t>(LCurrent->FX - 1 , 0 , LWidth - 1) && LCurrent->FY + 1 == std::clamp<std::intmax_t>(LCurrent->FY + 1 , 0 , LHeight - 1))
+        {
+            LChildren.push_back(&*std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == LCurrent->FX - 1 && PNode.FY == LCurrent->FY + 1;}));
+        }
+        if(LCurrent->FX + 1 == std::clamp<std::intmax_t>(LCurrent->FX + 1 , 0 , LWidth - 1) && LCurrent->FY - 1 == std::clamp<std::intmax_t>(LCurrent->FY - 1 , 0 , LHeight - 1))
+        {
+            LChildren.push_back(&*std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == LCurrent->FX + 1 && PNode.FY == LCurrent->FY - 1;}));
+        }
+        for(SNode*& LChild : LChildren)
+        {
+            if(std::ranges::find(LClosed , LChild) != LClosed.end())
+            {
+                continue;
+            }
+            LChild->FTo = LCurrent->FTo + static_cast<std::intmax_t>
+            (
+                std::sqrt((LCurrent->FX - LChild->FX) * (LCurrent->FX - LChild->FX) + (LCurrent->FY - LChild->FY) * (LCurrent->FY - LChild->FY)) * 10
+            );
+            LChild->FFrom = (std::abs(LChild->FX - LEnd->FX) + std::abs(LChild->FY - LEnd->FY)) * 10;
+            LChild->FTotal = LChild->FTo + LChild->FFrom;
+            LChild->FParent = LCurrent;
+            std::vector<SNode*>::iterator LIterator{std::ranges::find(LOpened , LChild)};
+            if(LIterator != LOpened.end())
+            {
+                if(LChild->FTo > (*LIterator)->FTo)
+                {
+                    continue;
+                }
+            }
+            LOpened.push_back(LChild);
+        }
+    }
     #ifdef _WIN32
         std::system("Pause");
     #endif
