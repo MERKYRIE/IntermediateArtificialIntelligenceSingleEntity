@@ -1,4 +1,3 @@
-/*
 #include<algorithm>
 #include<array>
 #include<iostream>
@@ -7,6 +6,7 @@
 #include<unordered_set>
 #include<vector>
 
+/*
 std::int32_t main()
 {
     std::unordered_map<std::string , std::unordered_map<std::string , std::uintmax_t>> LTransitions;
@@ -80,26 +80,27 @@ std::int32_t main()
 }
 */
 
-#include<algorithm>
-#include<array>
-#include<iostream>
-#include<string>
-#include<unordered_map>
-#include<unordered_set>
-#include<vector>
-
-std::int32_t main()
+std::int32_t main(std::int32_t , char**)
 {
+    struct STerrain
+    {
+        double FCost;
+    };
     struct SNode
     {
         std::intmax_t FTo;
         std::intmax_t FFrom;
-        std::intmax_t FTotal;
+        std::intmax_t FSum;
+        STerrain FTerrain;
         SNode* FParent;
         std::intmax_t FX;
         std::intmax_t FY;
     };
 
+    STerrain LNormal;
+    STerrain LChallenging;
+    STerrain LDifficult;
+    STerrain LImpossible;
     std::intmax_t LWidth;
     std::intmax_t LHeight;
     std::vector<SNode> LNodes;
@@ -110,29 +111,46 @@ std::int32_t main()
     std::vector<SNode*> LClosed;
     std::vector<SNode*> LChildren;
 
+    LNormal = {1.0};
+    LChallenging = {1.5};
+    LDifficult = {2.0};
+    LImpossible = {1'000'000'000.0};
     LWidth = 10;
     LHeight = 10;
     for(std::intmax_t LX{0} ; LX < LWidth ; LX++)
     {
         for(std::intmax_t LY{0} ; LY < LHeight ; LY++)
         {
-            LNodes.emplace_back(0 , 0 , 0 , nullptr , LX , LY);
+            LNodes.emplace_back(0 , 0 , 0 , LNormal , nullptr , LX , LY);
         }
     }
+    std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == 2 && PNode.FY == 2;})->FTerrain = LImpossible;
+    std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == 2 && PNode.FY == 1;})->FTerrain = LImpossible;
     LBegin = &*std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == 1 && PNode.FY == 1;});
     LEnd = &*std::ranges::find_if(LNodes , [&](SNode& PNode){return PNode.FX == 3 && PNode.FY == 2;});
     LOpened.push_back(LBegin);
     while(!LOpened.empty())
     {
-        LCurrent = std::ranges::min(LOpened , [&](SNode*& PNode , SNode*& PMinimum){return PNode->FTotal < PMinimum->FTotal;});
+        LCurrent = std::ranges::min(LOpened , [&](SNode*& PNode , SNode*& PMinimum){return PNode->FSum < PMinimum->FSum;});
         LOpened.erase(std::ranges::find(LOpened , LCurrent));
         LClosed.push_back(LCurrent);
         if(LCurrent == LEnd)
         {
-            for()
+            std::cout << "Width = " << LWidth << "\n"
+                      << "Height = " << LHeight << "\n"
+                      << "Begin = [" << LBegin->FX << "][" << LBegin->FY << "]" << "\n"
+                      << "End = [" << LEnd->FX << "][" << LEnd->FY << "]" << "\n"
+                      << "Path = " << "\n"
+                      << "{" << "\n";
+            for(SNode* LNode{LCurrent} ; LNode ; LNode = LNode->FParent)
             {
-            
+                std::cout << "    [" << LNode->FX << "][" << LNode->FY << "] = {To = " << LNode->FTo
+                          << " , From = " << LNode->FFrom
+                          << " , Sum = " << LNode->FSum
+                          << " , Terrain = " << LNode->FTerrain.FCost
+                          << "}" << "\n";
             }
+            std::cout << "}" << "\n";
             break;
         }
         if(LCurrent->FX - 1 == std::clamp<std::intmax_t>(LCurrent->FX - 1 , 0 , LWidth - 1))
@@ -175,10 +193,10 @@ std::int32_t main()
             }
             LChild->FTo = LCurrent->FTo + static_cast<std::intmax_t>
             (
-                std::sqrt((LCurrent->FX - LChild->FX) * (LCurrent->FX - LChild->FX) + (LCurrent->FY - LChild->FY) * (LCurrent->FY - LChild->FY)) * 10
+                std::sqrt((LCurrent->FX - LChild->FX) * (LCurrent->FX - LChild->FX) + (LCurrent->FY - LChild->FY) * (LCurrent->FY - LChild->FY)) * 10.0 * LChild->FTerrain.FCost
             );
             LChild->FFrom = (std::abs(LChild->FX - LEnd->FX) + std::abs(LChild->FY - LEnd->FY)) * 10;
-            LChild->FTotal = LChild->FTo + LChild->FFrom;
+            LChild->FSum = LChild->FTo + LChild->FFrom;
             LChild->FParent = LCurrent;
             std::vector<SNode*>::iterator LIterator{std::ranges::find(LOpened , LChild)};
             if(LIterator != LOpened.end())
